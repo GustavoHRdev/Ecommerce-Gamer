@@ -4,17 +4,27 @@ import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
   const router = useRouter();
-  const [user, setUser] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+
+  const isEmailValid = (email: string) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  };
 
   const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
-    if (!user || !password || !confirmPassword) {
+    if (!email || !password || !confirmPassword) {
       setError("Preencha todos os campos.");
+      return;
+    }
+
+    if (!isEmailValid(email)) {
+      setError("Digite um e-mail válido.");
       return;
     }
 
@@ -25,16 +35,16 @@ export default function RegisterPage() {
 
     const storedUsers = JSON.parse(localStorage.getItem("users") || "[]");
 
-    const usernameExists = storedUsers.some(
-      (storedUser: { user: string }) => storedUser.user === user
+    const emailExists = storedUsers.some(
+      (storedUser: { email: string }) => storedUser.email === email
     );
 
-    if (usernameExists) {
-      setError("Nome de usuário já está em uso.");
+    if (emailExists) {
+      setError("E-mail já cadastrado.");
       return;
     }
 
-    const newUser = { user, password };
+    const newUser = { email, password };
     localStorage.setItem("users", JSON.stringify([...storedUsers, newUser]));
 
     alert("Cadastro realizado com sucesso! Agora faça login.");
@@ -48,10 +58,10 @@ export default function RegisterPage() {
 
         <form onSubmit={handleRegister} className="space-y-4">
           <input
-            type="text"
-            placeholder="Usuário"
-            value={user}
-            onChange={(e) => setUser(e.target.value)}
+            type="email"
+            placeholder="E-mail"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="w-full p-3 rounded bg-gray-800 text-cyan-400 placeholder-cyan-600 focus:outline-none focus:ring-2 focus:ring-cyan-500"
             required
           />

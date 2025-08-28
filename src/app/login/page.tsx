@@ -1,4 +1,4 @@
-// app/login/page.tsx
+
 "use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -52,18 +52,22 @@ export default function LoginPage() {
   }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
-  e.preventDefault();
+    e.preventDefault();
+    setError("");
 
-  const storedUser = localStorage.getItem("user");
-  const storedPassword = localStorage.getItem("password");
+    const storedUsers = JSON.parse(localStorage.getItem("users") || "[]");
+    const foundUser = storedUsers.find(
+      (u: { email: string; password: string }) =>
+        (u.email === user || u.email === user.trim()) && u.password === password
+    );
 
-  if (user === storedUser && password === storedPassword) {
-    localStorage.setItem("isLogged", "true");
-    router.push("/home");
-  } else {
-    setError("Usuário ou senha inválidos.");
-  }
-};
+    if (foundUser) {
+      localStorage.setItem("isLogged", "true");
+      router.push("/home");
+    } else {
+      setError("Usuário ou senha inválidos.");
+    }
+  };
 
   return (
     <div
