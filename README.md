@@ -36,10 +36,11 @@ Um projeto de **e-commerce gamer** desenvolvido com foco em uma interface modern
 
 ---
 
-## 📸 Prévia (em breve)
+## 📸 Prévia
 
-> Adicionarei aqui capturas de tela conforme o projeto evoluir! 📷
-
+![Login](public/login.PNG)
+![Home](/public/home.PNG)
+![Carrinho](public/carrinho.PNG)
 ---
 
 ## 📁 Executar localmente
